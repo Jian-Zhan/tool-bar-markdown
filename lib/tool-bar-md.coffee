@@ -29,30 +29,14 @@ module.exports =
 
   buttons: [
     {
-      'icon': 'file'
-      'tooltip': 'Add New Post/Draft'
-      'callback':
-        '': 'markdown-writer:new-post'
-        'shift': 'markdown-writer:new-draft'
+      'icon': 'sitemap'
+      'tooltip': 'Toggle Tree View'
+      'callback': 'tree-view:toggle'
     }
     {
       'icon': 'markdown'
       'tooltip': 'Preview Markdown'
-      'data': ['markdown-preview', 'markdown-preview-plus', 'markdown-preview-enhanced']
-      'visible': (data) ->
-        pkg = data.find (pkg) -> !!atom.packages.getLoadedPackage(pkg)
-        "#{pkg}:toggle" if pkg
-    }
-    { 'type': 'separator' }
-    {
-      'icon': 'tag'
-      'tooltip': 'Manage Tags'
-      'callback': 'markdown-writer:manage-post-tags'
-    }
-    {
-      'icon': 'label'
-      'tooltip': 'Manage Categories'
-      'callback': 'markdown-writer:manage-post-categories'
+      'callback': 'markdown-preview-enhanced:toggle'
     }
     { 'type': 'separator' }
     {
@@ -80,10 +64,8 @@ module.exports =
     }
     {
       'icon': 'code-tags'
-      'tooltip': 'Code/Code Block'
-      'callback':
-        '': 'markdown-writer:toggle-code-text'
-        'shift': 'markdown-writer:toggle-codeblock-text'
+      'tooltip': 'Code Block'
+      'callback': 'markdown-writer:toggle-codeblock-text'
     }
     { 'type': 'separator' }
     {
@@ -97,13 +79,6 @@ module.exports =
       'callback':
         '': 'markdown-writer:toggle-ol'
         'shift': 'markdown-writer:correct-order-list-numbers'
-    }
-    {
-      'icon': 'playlist-check'
-      'tooltip': 'Task List'
-      'callback':
-        '': 'markdown-writer:toggle-task'
-        'shift': 'markdown-writer:toggle-taskdone'
     }
     { 'type': 'separator' }
     {
@@ -185,14 +160,14 @@ module.exports =
   ]
 
   consumeToolBar: (toolBar) ->
-    @toolBar = toolBar('tool-bar-markdown-writer')
+    @toolBar = toolBar('tool-bar-md')
     # cleaning up when tool bar is deactivated
     @toolBar.onDidDestroy => @toolBar = null
     # display buttons
     @addButtons()
 
   isCriticMarkupEnabled: ->
-    return atom.config.get('tool-bar-markdown-writer.critic_markup')
+    return atom.config.get('tool-bar-md.critic_markup')
 
   hideOptionalCriticMarkupButton: (button) ->
     return button['option'] == 'criticmarkup' and not @isCriticMarkupEnabled()
@@ -229,18 +204,18 @@ module.exports =
     editor = atom.workspace.getActiveTextEditor()
     return false unless editor?
 
-    grammars = atom.config.get('tool-bar-markdown-writer.grammars')
+    grammars = atom.config.get('tool-bar-md.grammars')
     return grammars.indexOf(editor.getGrammar().scopeName) >= 0
 
   activate: ->
     require('atom-package-deps')
-      .install('tool-bar-markdown-writer', true)
+      .install('tool-bar-md', true)
       .then(=> @activateBar())
 
   activateBar: ->
     @subscriptions = new CompositeDisposable()
     @subscriptions.add atom.workspace.onDidStopChangingActivePaneItem (item) =>
-      visibility = atom.config.get('tool-bar-markdown-writer.visibility')
+      visibility = atom.config.get('tool-bar-md.visibility')
 
       if @isMarkdown()
         @removeButtons()
