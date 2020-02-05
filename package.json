@@ -1,12 +1,11 @@
 {
   "name": "tool-bar-md",
   "main": "./lib/tool-bar-md",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A tool-bar plugin that adds Markdown editing actions",
   "keywords": [
     "tool-bar",
     "markdown",
-    "markdown-writer",
     "writing"
   ],
   "repository": "https://github.com/Jian-Zhan/tool-bar-markdown",
@@ -15,8 +14,9 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "package-deps": [
-    "document-outline",
     "tool-bar",
+    "document-outline",
+    "markdown-preview-enhanced",
     "markdown-writer"
   ],
   "dependencies": {
